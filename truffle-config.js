@@ -10,6 +10,8 @@ module.exports = {
       version: "^0.6.0",
     }
   },
+  contracts_directory: './src/contracts/',
+  contracts_build_directory: './src/abis/',
   networks: {
     development: {
       host: "127.0.0.1",
