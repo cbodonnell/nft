@@ -5,4 +5,5 @@ module.exports = async function(callback) {
     const account = "0xcaeB934174B93991a537345f31b76911d56763D2";
     await gameItem.awardItem(account, "https://game.example/unique-token.json");
     console.log('Awarded item!');
+    callback();
 };
