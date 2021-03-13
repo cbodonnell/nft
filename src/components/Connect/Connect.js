@@ -8,10 +8,7 @@ export default class Connect extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            account: '',
-            networkId: ''
-        };
+        this.state = { account: '' };
         this.onConnect = this.onConnect.bind(this);
     }
 
@@ -48,7 +45,10 @@ export default class Connect extends React.Component {
         const web3 = window.web3;
     
         const accounts = await web3.eth.getAccounts();
-        this.setState({ account: accounts[0] });
+        const account = accounts[0];
+        this.setState({ account });
+
+        this.props.setAccount(account);
     }
 
     onConnect(e) {
