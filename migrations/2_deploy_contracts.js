@@ -1,5 +1,5 @@
-const GameItem = artifacts.require("GameItem");
+const DonoToken = artifacts.require("DonoToken");
 
 module.exports = function(deployer) {
-  deployer.deploy(GameItem);
+  deployer.deploy(DonoToken);
 };

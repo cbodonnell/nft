@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders Blockchain Playground', () => {
+test('renders DonoToken', () => {
   render(<App />);
-  const linkElement = screen.getByText(/Blockchain Playground/i);
+  const linkElement = screen.getByText(/DonoToken/i);
   expect(linkElement).toBeInTheDocument();
 });

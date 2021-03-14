@@ -2,7 +2,7 @@ import React from 'react';
 import './Transfer.scss';
 
 
-export default class Balance extends React.Component {
+export default class Transfer extends React.Component {
 
     constructor(props) {
         super(props);
@@ -33,7 +33,7 @@ export default class Balance extends React.Component {
     render() {
         return (
             <>
-                <form>
+                <form className="my-4">
                     <h5>Transfer:</h5>
                     <div className="form-group">
                         <label for="token">Token:</label>
@@ -57,7 +57,7 @@ export default class Balance extends React.Component {
                         value={this.state.transferTo}
                         onChange={this.onChangeTransferTo} />
                     </div>
-                    <button className="btn btn-primary mt-2" type="submit" onClick={this.onTransfer}>Transfer</button>
+                    <button className="btn btn-primary my-2" type="submit" onClick={this.onTransfer}>Transfer</button>
                 </form>
             </>
         );

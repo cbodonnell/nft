@@ -1,4 +1,4 @@
-const GameItem = artifacts.require('GameItem');
+const DonoToken = artifacts.require('DonoToken');
 
 // TODO: Can this be imported somehow from utils??
 const random = (length = 8) => {
@@ -11,10 +11,10 @@ const random = (length = 8) => {
 };
 
 module.exports = async function(callback) {
-    let gameItem = await GameItem.deployed();
+    let donoToken = await DonoToken.deployed();
     const account = "0xcaeB934174B93991a537345f31b76911d56763D2";
-    const item = `https://studio10b.nyc/tokens/${random(32)}.json`;
-    await gameItem.awardItem(account, item);
+    const item = `https://donotoken.org/tokens/${random(32)}.json`;
+    await donoToken.awardItem(account, item);
     console.log(`Awarded item: ${item}`);
     callback();
 };

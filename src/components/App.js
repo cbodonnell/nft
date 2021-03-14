@@ -1,23 +1,25 @@
 import React from 'react';
 import './App.scss';
 import Web3 from 'web3';
-import GameItem from "../abis/GameItem.json";
+import DonoToken from "../abis/DonoToken.json";
 import Navbar from './Navbar/Navbar';
 import Balance from './Balance/Balance';
 import Transfer from './Transfer/Transfer';
+import Create from './Create/Create';
 
 class App extends React.Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      gameItem: {},
-      gameItemBalance: 0,
+      donoToken: {},
+      donoTokenBalance: 0,
       account: '0x0',
       tokens: [],
       loading: true
     }
     this.onTransfer = this.onTransfer.bind(this);
+    this.onCreate = this.onCreate.bind(this);
   }
 
   async componentDidMount() {
@@ -54,24 +56,24 @@ class App extends React.Component {
 
     const networkId = await web3.eth.net.getId();
 
-    const gameItemData = GameItem.networks[networkId];
-    if (gameItemData) {
-      const gameItem = new web3.eth.Contract(GameItem.abi, gameItemData.address);
-      this.setState({ gameItem });
-      let gameItemBalance = await gameItem.methods.balanceOf(this.state.account).call();
-      gameItemBalance = parseInt(gameItemBalance.toString(), 10);
-      this.setState({ gameItemBalance });
+    const donoTokenData = DonoToken.networks[networkId];
+    if (donoTokenData) {
+      const donoToken = new web3.eth.Contract(DonoToken.abi, donoTokenData.address);
+      this.setState({ donoToken });
+      let donoTokenBalance = await donoToken.methods.balanceOf(this.state.account).call();
+      donoTokenBalance = parseInt(donoTokenBalance.toString(), 10);
+      this.setState({ donoTokenBalance });
     } else {
-      window.alert("GameItem contract not deployed to the detected network");
+      window.alert("DonoToken contract not deployed to the detected network");
     }
 
     this.setState({ loading: false });
   }
 
   async getTokens() {
-    for (let i = 0; i < this.state.gameItemBalance; i++) {
-      this.state.gameItem.methods.tokenOfOwnerByIndex(this.state.account, i).call().then(tokenId => {
-        this.state.gameItem.methods.tokenURI(tokenId).call().then(tokenURI => {
+    for (let i = 0; i < this.state.donoTokenBalance; i++) {
+      this.state.donoToken.methods.tokenOfOwnerByIndex(this.state.account, i).call().then(tokenId => {
+        this.state.donoToken.methods.tokenURI(tokenId).call().then(tokenURI => {
           const token = { tokenId, tokenURI };
           this.setState({ tokens: [...this.state.tokens, token] });
         });
@@ -82,7 +84,7 @@ class App extends React.Component {
   async onTransfer(tokenId, toAddress) {
     if (tokenId) {
       try {
-        await this.state.gameItem.methods.safeTransferFrom(
+        await this.state.donoToken.methods.safeTransferFrom(
           this.state.account,
           toAddress,
           tokenId
@@ -97,6 +99,19 @@ class App extends React.Component {
       alert("Please select a token");
     }
   }
+
+  async onCreate(tokenURI) {
+      try {
+        await this.state.donoToken.methods.createItem(tokenURI)
+        .send({ from: this.state.account });
+        window.location.reload();
+      } catch (error) {
+        console.error(error);
+        // if (error.message.includes("invalid address")) {
+        //   alert("Please input a valid URI");
+        // }
+      }
+  }
   
   render() {
     let content
@@ -105,11 +120,12 @@ class App extends React.Component {
     } else {
       content = (
         <div>
-          <Balance gameItemBalance={this.state.gameItemBalance}
+          <Balance donoTokenBalance={this.state.donoTokenBalance}
           tokens={this.state.tokens} />
           <Transfer account={this.state.account}
           tokens={this.state.tokens}
           onTransfer={this.onTransfer} />
+          <Create onCreate={this.onCreate} />
         </div>
       );
     }
@@ -122,7 +138,7 @@ class App extends React.Component {
             <main role="main" className="col-lg-12 ml-auto mr-auto" style={{ maxWidth: '1200px' }}>
               <div className="content mr-auto ml-auto mt-3">
                 <a
-                  href="https://www.studio10b.nyc"
+                  href="https://www.donotoken.org"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
