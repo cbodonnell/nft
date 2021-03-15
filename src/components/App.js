@@ -6,6 +6,7 @@ import Navbar from './Navbar/Navbar';
 import Balance from './Balance/Balance';
 import Transfer from './Transfer/Transfer';
 import Create from './Create/Create';
+import Delete from './Delete/Delete';
 
 class App extends React.Component {
 
@@ -20,6 +21,7 @@ class App extends React.Component {
     }
     this.onTransfer = this.onTransfer.bind(this);
     this.onCreate = this.onCreate.bind(this);
+    this.onDelete = this.onDelete.bind(this);
   }
 
   async componentDidMount() {
@@ -112,6 +114,21 @@ class App extends React.Component {
         // }
       }
   }
+
+  async onDelete(tokenId) {
+    console.log(tokenId);
+    if (tokenId) {
+      try {
+        await this.state.donoToken.methods.burn(tokenId)
+        .send({ from: this.state.account });
+        window.location.reload();
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      alert("Please select a token");
+    }
+  }
   
   render() {
     let content
@@ -122,10 +139,11 @@ class App extends React.Component {
         <div>
           <Balance donoTokenBalance={this.state.donoTokenBalance}
           tokens={this.state.tokens} />
-          <Transfer account={this.state.account}
-          tokens={this.state.tokens}
+          <Transfer tokens={this.state.tokens}
           onTransfer={this.onTransfer} />
           <Create onCreate={this.onCreate} />
+          <Delete tokens={this.state.tokens}
+          onDelete={this.onDelete} />
         </div>
       );
     }
