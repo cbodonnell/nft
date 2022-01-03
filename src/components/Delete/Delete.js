@@ -25,7 +25,7 @@ export default class Delete extends React.Component {
         return (
             <>
                 <form className="my-4">
-                    <h5>Transfer:</h5>
+                    <h5>Delete:</h5>
                     <div className="form-group">
                         <label for="token">Token:</label>
                         <select 
